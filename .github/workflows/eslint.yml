@@ -22,19 +22,18 @@ jobs:
         uses: actions/checkout@v2
         with:
           token: ${{ secrets.TOKEN }}
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          list-files: shell
+          filters: |
+            client: 
+              - added|modified:'{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}'
+              - added|modified: '*.{js,ts,json}'
+            parent: 
+              - added|modified:'./.github/**/*.yml'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
-      - name: Get Changed Files
-        id: check-changes
-        run: |
-          CHANGED_FILES=$(git diff --name-only HEAD HEAD^)
-          if [ -z "$CHANGED_FILES" ]; then
-            echo "No files have changed. Skipping Prettier check."
-            exit 78
-          else
-            echo "Files have changed. Running Prettier check."
-            echo "::set-output name=changed_files::$CHANGED_FILES"
-          fi
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
@@ -42,17 +41,18 @@ jobs:
       - name: Install Dependencies
         run: yarn install
       - name: Check Prettier Formatting
-        if: steps.check-changes.outcome == 'success'
+        id: prettier-check
+        if: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.parent == 'true' }}
         run: |
-          npx prettier --check "${{ steps.check-changes.outputs.changed_files }}" --ignore-path="{../yarn.lock,../package.json}"
+          npx prettier --check ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
-        if: steps.check-changes.outcome == 'failure'
+        if: steps.prettier-check.outcome == 'failure'
         run: |
           git fetch --unshallow
           git checkout ${{ env.BRANCH_NAME }}
-          npx prettier --write "${{ steps.check-changes.outputs.changed_files }}" --ignore-path="{../yarn.lock,../package.json}"
-          git config --global user.email "aa@gmail.com"
+          npx prettier --write ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
+          git config --global user.email "aaa@gmail.com"
           git config --global user.name "aa Dev Bot"
           git add -A
           git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
