@@ -1,3 +1,3 @@
 interface main {
-    name: string
+  name: string;
 }

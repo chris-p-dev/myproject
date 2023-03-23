@@ -6,8 +6,7 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
-    if:
-      github.event_name == 'pull_request' && !startsWith(github.base_ref,
+    if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
       'release/')
 
     defaults:
@@ -48,8 +47,7 @@ jobs:
           git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
           git push origin ${{ env.BRANCH_NAME }}
   eslint:
-    if:
-      always() && github.event_name == 'pull_request' && (github.base_ref ==
+    if: always() && github.event_name == 'pull_request' && (github.base_ref ==
       'nextjs' || github.base_ref == 'nextjs-prod'
       ||  startsWith(github.base_ref, 'release/'))
     needs: prettier
