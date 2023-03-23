@@ -1,0 +1,3 @@
+interface main {
+    name: string
+}
