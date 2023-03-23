@@ -6,8 +6,7 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
-    if:
-      github.event_name == 'pull_request' && !startsWith(github.base_ref,
+    if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
       'release/')
 
     defaults:
@@ -25,6 +24,12 @@ jobs:
           token: ${{ secrets.TOKEN }}
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+      - name: Get Changed Files
+        id: changed-files
+        run: |
+          CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...${{ github.head_ref }} -- {src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json} "*.{js,ts,json}" "../.github/**/*.yml" --ignore-path="{../yarn.lock,../package.json}")
+          echo "Changed files: $CHANGED_FILES"
+          echo "::set-output name=changed_files::$CHANGED_FILES"
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2
         with:
@@ -34,22 +39,27 @@ jobs:
       - name: Check Prettier Formatting
         id: prettier-check
         run: |
-          npx prettier --check "{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}" "*.{js,ts,json}" "../.github/**/*.yml" --ignore-path="{../yarn.lock,../package.json}"
+          CHANGED_FILES=$(echo "${{ steps.get-changed-files.outputs.files }}" | tr '\n' ' ')
+          if [ -n "$CHANGED_FILES" ]; then
+            npx prettier --check $CHANGED_FILES --ignore-path="{../yarn.lock,../package.json}"
+          fi
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
         if: steps.prettier-check.outcome == 'failure'
         run: |
           git fetch --unshallow
           git checkout ${{ env.BRANCH_NAME }}
-          npx prettier --write "{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}" "*.{js,ts,json}" "../.github/**/*.yml" --ignore-path="{../yarn.lock,../package.json}"
-          git config --global user.email "aaa@gmail.com"
-          git config --global user.name "aa Dev Bot"
-          git add -A
-          git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
-          git push origin ${{ env.BRANCH_NAME }}
+          CHANGED_FILES=$(echo "${{ steps.get-changed-files.outputs.files }}" | tr '\n' ' ')
+          if [ -n "$CHANGED_FILES" ]; then
+            npx prettier --write $CHANGED_FILES --ignore-path="{../yarn.lock,../package.json}"
+            git config --global user.email "aa@gmail.com"
+            git config --global user.name "aa Dev Bot"
+            git add $CHANGED_FILES
+            git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
+            git push origin ${{ env.BRANCH_NAME }}
+          fi
   eslint:
-    if:
-      always() && github.event_name == 'pull_request' && (github.base_ref ==
+    if: always() && github.event_name == 'pull_request' && (github.base_ref ==
       'nextjs' || github.base_ref == 'nextjs-prod'
       ||  startsWith(github.base_ref, 'release/'))
     needs: prettier
