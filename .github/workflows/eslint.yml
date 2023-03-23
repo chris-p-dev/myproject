@@ -22,7 +22,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.AVB_SERVICES_BOT }}
+          token: ${{ secrets.TOKEN }}
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
@@ -42,8 +42,8 @@ jobs:
           git fetch --unshallow
           git checkout ${{ env.BRANCH_NAME }}
           npx prettier --write "{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}" "*.{js,ts,json}" "../.github/**/*.yml" --ignore-path="{../yarn.lock,../package.json}"
-          git config --global user.email "avb-dev-services@avb.net"
-          git config --global user.name "AVB Dev Bot"
+          git config --global user.email "aaa@gmail.com"
+          git config --global user.name "aa Dev Bot"
           git add -A
           git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
           git push origin ${{ env.BRANCH_NAME }}
