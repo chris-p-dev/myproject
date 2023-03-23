@@ -1,0 +1,78 @@
+name: Code Quality Check
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    if:
+      github.event_name == 'pull_request' && !startsWith(github.base_ref,
+      'release/')
+
+    defaults:
+      run:
+        working-directory: client
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.AVB_SERVICES_BOT }}
+      - name: Save Branch Name to GitHub Environment Variable
+        run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install Dependencies
+        run: yarn install
+      - name: Check Prettier Formatting
+        id: prettier-check
+        run: |
+          npx prettier --check "{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}" "*.{js,ts,json}" "../.github/**/*.yml" --ignore-path="{../yarn.lock,../package.json}"
+        continue-on-error: true
+      - name: Auto-format Code and Commit Prettier Changes
+        if: steps.prettier-check.outcome == 'failure'
+        run: |
+          git fetch --unshallow
+          git checkout ${{ env.BRANCH_NAME }}
+          npx prettier --write "{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}" "*.{js,ts,json}" "../.github/**/*.yml" --ignore-path="{../yarn.lock,../package.json}"
+          git config --global user.email "avb-dev-services@avb.net"
+          git config --global user.name "AVB Dev Bot"
+          git add -A
+          git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
+          git push origin ${{ env.BRANCH_NAME }}
+  eslint:
+    if:
+      always() && github.event_name == 'pull_request' && (github.base_ref ==
+      'nextjs' || github.base_ref == 'nextjs-prod'
+      ||  startsWith(github.base_ref, 'release/'))
+    needs: prettier
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: client
+
+    strategy:
+      matrix:
+        node-version: [16]
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install deps
+        run: |
+          yarn install
+      - name: Run eslint
+        run: yarn lint
+        env:
+          CI: true
