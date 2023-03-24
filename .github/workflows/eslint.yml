@@ -27,11 +27,7 @@ jobs:
         with:
           list-files: shell
           filters: |
-            client: 
-              - added|modified:'**/*.tsx'
-              - added|modified: '*.{js,ts,json}'
-            parent: 
-              - added|modified:'./.github/**/*.yml'
+              - '**/*.tsx'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
