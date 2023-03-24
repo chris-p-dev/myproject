@@ -25,7 +25,8 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          list-files: shell
+          working-directory: 'client'
+          list-files: 'shell'
           filters: |
             client:
               - 'src/**/*.{js,jsx,ts,tsx}'
