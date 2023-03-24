@@ -25,9 +25,9 @@ jobs:
           filters: |
             client:
               - 'client/src/**/*.{js,jsx,ts,tsx}'
-              - 'project_utils/**/*.{js,jsx,ts,tsx}'
-              - 'puppeteer/**/*.{js,jsx,ts,tsx}'
-              - 'tests/**/*.{js,jsx,ts,tsx}'
+              - 'client/project_utils/**/*.{js,jsx,ts,tsx}'
+              - 'client/puppeteer/**/*.{js,jsx,ts,tsx}'
+              - 'client/tests/**/*.{js,jsx,ts,tsx}'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
@@ -40,7 +40,7 @@ jobs:
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.parent == 'true' }}
         run: |
-          npx prettier --check ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
+          npx prettier --check ${{ steps.filter.outputs.client_files }} --ignore-path="{../yarn.lock,../package.json}"
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
         if: steps.prettier-check.outcome == 'failure'
