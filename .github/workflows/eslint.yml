@@ -25,11 +25,10 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          working-directory: 'client'
           list-files: 'shell'
           filters: |
             client:
-              - 'src/**/*.{js,jsx,ts,tsx}'
+              - 'client/src/**/*.{js,jsx,ts,tsx}'
               - 'project_utils/**/*.{js,jsx,ts,tsx}'
               - 'puppeteer/**/*.{js,jsx,ts,tsx}'
               - 'tests/**/*.{js,jsx,ts,tsx}'
