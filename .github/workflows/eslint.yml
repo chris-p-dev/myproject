@@ -28,7 +28,7 @@ jobs:
           list-files: shell
           filters: |
             client: 
-              - added|modified:'/**/*.{js,ts,tsx,json}'
+              - added|modified:'/**/*.tsx'
               - added|modified: '*.{js,ts,json}'
             parent: 
               - added|modified:'./.github/**/*.yml'
