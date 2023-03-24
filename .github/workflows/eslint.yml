@@ -9,10 +9,6 @@ jobs:
     if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
       'release/')
 
-    defaults:
-      run:
-        working-directory: client
-
     strategy:
       matrix:
         node-version: [16.x]
