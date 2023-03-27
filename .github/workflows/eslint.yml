@@ -32,6 +32,7 @@ jobs:
               - 'project_utils/**/*.{js,jsx,ts,tsx}'
               - 'puppeteer/**/*.{js,jsx,ts,tsx}'
               - 'tests/**/*.{js,jsx,ts,tsx}'
+          working-directory: 'client'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
