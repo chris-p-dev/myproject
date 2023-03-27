@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
       'release/')
-
+      
     defaults:
       run:
         working-directory: client
@@ -25,13 +25,13 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          list-files: shell
+          list-files: 'shell'
           filters: |
-            client: 
-              - added|modified:'{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}'
-              - added|modified: '*.{js,ts,json}'
-            parent: 
-              - added|modified:'./.github/**/*.yml'
+            client:
+              - 'src/**/*.{js,jsx,ts,tsx}'
+              - 'project_utils/**/*.{js,jsx,ts,tsx}'
+              - 'puppeteer/**/*.{js,jsx,ts,tsx}'
+              - 'tests/**/*.{js,jsx,ts,tsx}'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
@@ -44,7 +44,7 @@ jobs:
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.parent == 'true' }}
         run: |
-          npx prettier --check ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
+          npx prettier --check ${{ steps.filter.outputs.client_files }} --ignore-path="{../yarn.lock,../package.json}"
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
         if: steps.prettier-check.outcome == 'failure'
