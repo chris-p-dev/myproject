@@ -1,13 +1,5 @@
 const testMy = () => {
-    console.log("testMy");
+  console.log("testMy");
 
-
-
-
-
-
-
-
-                        console.log("testimg")
-  };
-  
+  console.log("testimg");
+};

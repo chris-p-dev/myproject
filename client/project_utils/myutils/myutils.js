@@ -1,4 +1,3 @@
 const generateSomething = () => {
-                                        console.log("new utils herer");
-  };
-  
+  console.log("new utils herer");
+};
