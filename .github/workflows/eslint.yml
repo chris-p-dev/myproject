@@ -21,7 +21,7 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          list-files: 'shell'
+          list-files: "shell"
           filters: |
             client:
               - '{client/src,client/project_utils,client/puppeteer,client/tests}/**/*.{js,ts,tsx,json}'
