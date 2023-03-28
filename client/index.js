@@ -1,1 +1,1 @@
-       console.log("my index")
+console.log("my index");

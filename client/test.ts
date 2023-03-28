@@ -1,3 +1,3 @@
 export const getKatapultEnabled = (state: any) => {
-                        state.katapult_enabled
-}
+  state.katapult_enabled;
+};
