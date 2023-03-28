@@ -49,8 +49,9 @@ jobs:
           npx prettier --write ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
           git config --global user.email "aaa@gmail.com"
           git config --global user.name "aa Dev Bot"
-          git add --ignore-errors --exclude=node_modules/ --exclude=yarn.lock -A
-          git commit --exclude=node_modules/ --exclude=yarn.lock -m "chore: Auto-run Prettier on files in PR" --no-verify
+          git add --ignore-errors -A
+          git rm --cached -r node_modules yarn.lock
+          git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
           git push origin ${{ env.BRANCH_NAME }}
   eslint:
     if: always() && github.event_name == 'pull_request' && (github.base_ref ==
