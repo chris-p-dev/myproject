@@ -24,10 +24,9 @@ jobs:
           list-files: 'shell'
           filters: |
             client:
-              - 'client/src/**/*.{js,jsx,ts,tsx}'
-              - 'client/project_utils/**/*.{js,jsx,ts,tsx}'
-              - 'client/puppeteer/**/*.{js,jsx,ts,tsx}'
-              - 'client/tests/**/*.{js,jsx,ts,tsx}'
+              - '{client/src,client/project_utils,client/puppeteer,client/tests}/**/*.{js,ts,tsx,json}'
+              - 'client/*.{js,ts,json}'
+              - '.github/**/*.yml'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
