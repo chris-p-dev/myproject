@@ -1,13 +1,5 @@
 const testMyTest = () => {
-          console.log("testing");
+  console.log("testing");
 
-
-
-
-
-
-
-
-
-          console.log("more test");
+  console.log("more test");
 };
