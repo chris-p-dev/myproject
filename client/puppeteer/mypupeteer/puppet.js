@@ -1,3 +1,3 @@
 const testPuppet = () => {
-                            console.log('puppeeeet');
-}
+  console.log("puppeeeet");
+};
