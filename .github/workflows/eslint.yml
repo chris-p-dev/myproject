@@ -6,14 +6,18 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
-      'release/')
+    if: |
+      github.event_name == 'pull_request' &&
+      !startsWith(github.base_ref, 'release/') &&
+      ${{ `$(git log -1 --pretty=%s)` }} != 'chore: Auto-run Prettier on files in PR'
 
     strategy:
       matrix:
         node-version: [16.x]
 
     steps:
+      - name: Check Last Commit Message
+        run: echo ${{  `$(git log -1 --pretty=%s)` }}
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
