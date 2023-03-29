@@ -6,9 +6,11 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     if: |
-      github.event_name == 'pull_request' && !startsWith(github.base_ref,
-      'release/') && github.event.pull_request.head.label != 'chore: Auto-run Prettier on files in PR'
+      github.event_name == 'pull_request' &&
+      !startsWith(github.base_ref, 'release/')
 
     strategy:
       matrix:
@@ -16,11 +18,12 @@ jobs:
 
     steps:
       - name: Check Last Commit Message
-        run: echo ${{ github.event.pull_request.head.label }}
+        run: |
+          echo ${{ github.actor }}
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - uses: dorny/paths-filter@v2
         id: filter
         with:
