@@ -50,6 +50,7 @@ jobs:
           git config --global user.email "aaa@gmail.com"
           git config --global user.name "aa Dev Bot"
           git add -A
+          git reset yarn.lock
           git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
           git push origin ${{ env.BRANCH_NAME }}
   eslint:
