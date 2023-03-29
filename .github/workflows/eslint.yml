@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Check Last Commit Message
-        run: echo ${{ github.event.head_commit.message }}
+        run: echo $(git log -1 --pretty=%s)
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
