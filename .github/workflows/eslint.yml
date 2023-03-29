@@ -7,8 +7,9 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
     if: |
-      github.event_name == 'pull_request' && !startsWith(github.base_ref,
-      'release/') && github.event.pull_request.head.label != 'chore: Auto-run Prettier on files in PR'
+      github.event_name == 'pull_request' &&
+      !startsWith(github.base_ref, 'release/') &&
+      $(git log -1 --pretty=%s) != 'chore: Auto-run Prettier on files in PR'
 
     strategy:
       matrix:
