@@ -1,12 +1,5 @@
 const newUtilz = () => {
-                                                                                console.log("newUtilz");
+  console.log("newUtilz");
 
-
-
-
-
-
-                                                                                console.log("newUtilz2");
-
-                                            };
-                                            
+  console.log("newUtilz2");
+};
