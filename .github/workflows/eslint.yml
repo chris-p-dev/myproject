@@ -50,8 +50,6 @@ jobs:
           git fetch --unshallow
           git checkout ${{ env.BRANCH_NAME }}
           npx prettier --write ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
-          git config --global user.email "aaa@gmail.com"
-          git config --global user.name "aa Dev Bot"
           git add -A
           git reset yarn.lock
           git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
