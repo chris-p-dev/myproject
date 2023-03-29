@@ -20,7 +20,6 @@ jobs:
       - name: Check Last Commit Message
         run: |
           echo ${{ github.actor }}
-          echo ${{ GH_TOKEN }}
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
