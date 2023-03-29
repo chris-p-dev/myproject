@@ -9,7 +9,7 @@ jobs:
     if: |
       github.event_name == 'pull_request' &&
       !startsWith(github.base_ref, 'release/') &&
-      github.event.commits[0].message != 'chore: Auto-run Prettier on files in PR'
+      github.event.workflow_run.head_commit.message != 'chore: Auto-run Prettier on files in PR'
 
     strategy:
       matrix:
@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Check Last Commit Message
-        run: echo ${{  github.event.commits[0].message }}
+        run: echo ${{  github.event.workflow_run.head_commit.message }}
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
