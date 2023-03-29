@@ -8,8 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.event_name == 'pull_request' &&
-      !startsWith(github.base_ref, 'release/') &&
-      ${{ ne(`$(git log -1 --pretty=%s)`, 'chore: Auto-run Prettier on files in PR') }}
+      !startsWith(github.base_ref, 'release/') 
 
     strategy:
       matrix:
