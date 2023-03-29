@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     if: |
       github.event_name == 'pull_request' && !startsWith(github.base_ref,
-      'release/') && $(git log -1 --pretty=%s) != 'chore: Auto-run Prettier on files in PR'
+      'release/') && github.event.pull_request.head.label != 'chore: Auto-run Prettier on files in PR'
 
     strategy:
       matrix:
@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Check Last Commit Message
-        run: echo $(git log -1 --pretty=%s)
+        run: echo github.event.pull_request.head.label
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
