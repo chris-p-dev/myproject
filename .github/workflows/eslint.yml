@@ -36,8 +36,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Dependencies
-        run: yarn install
+      - name: Install Dependencies and Change Directory to client
+        run: cd client && yarn install
       - name: Check Prettier Formatting
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.parent == 'true' }}
