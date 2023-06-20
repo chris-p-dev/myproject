@@ -7,7 +7,7 @@ jobs:
   prettier:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
-      'release/')
+      'release/') &&  github.actor != 'aa Dev Bot'
 
     strategy:
       matrix:
@@ -24,9 +24,9 @@ jobs:
           list-files: "shell"
           filters: |
             client:
-              - '{client/src,client/project_utils,client/puppeteer,client/tests}/**/*.{js,ts,tsx,json}'
-              - 'client/*.{js,ts,json}'
-              - '.github/**/*.yml'
+              - added|modified: '{client/src,client/project_utils,client/puppeteer,client/tests}/**/*.{js,ts,tsx,json}'
+              - added|modified: 'client/*.{js,ts,json}'
+              - added|modified: '.github/**/*.yml'
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
@@ -37,7 +37,7 @@ jobs:
         run: yarn install
       - name: Check Prettier Formatting
         id: prettier-check
-        if: ${{ steps.filter.outputs.client == 'true' || steps.filter.outputs.parent == 'true' }}
+        if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
           npx prettier --check ${{ steps.filter.outputs.client_files }} --ignore-path="{../yarn.lock,../package.json}"
         continue-on-error: true
