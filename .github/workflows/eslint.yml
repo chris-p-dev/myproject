@@ -36,6 +36,7 @@ jobs:
       - name: Install Dependencies
         run: |
           echo "Current Working Directory: $PWD"
+          ls -la
           yarn install
           cat package.json
         working-directory: client
@@ -44,6 +45,7 @@ jobs:
         if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
           echo "Current Working Directory: $PWD"
+          ls -la
           cat package.json
           npx prettier --check ${{ steps.filter.outputs.client_files }} --ignore-path="{../yarn.lock,../package.json}"
         working-directory: client
