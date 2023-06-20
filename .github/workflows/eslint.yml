@@ -37,12 +37,14 @@ jobs:
         run: |
           echo "Current Working Directory: $PWD"
           yarn install
+          cat package.json
         working-directory: client
       - name: Check Prettier Formatting
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
           echo "Current Working Directory: $PWD"
+          cat package.json
           npx prettier --check ${{ steps.filter.outputs.client_files }} --ignore-path="{../yarn.lock,../package.json}"
         working-directory: client
       - name: Auto-format Code and Commit Prettier Changes
