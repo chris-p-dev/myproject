@@ -47,12 +47,14 @@ jobs:
         if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
           files=$(echo "${{ steps.filter.outputs.client_files }}" | sed "s@[^ ]*@${{ github.workspace }}/&@g")
-          npx prettier --write $files --ignore-path="{./yarn.lock,./package.json}"
+          npx prettier --write $files --ignore-path="{{{ github.workspace }}/client/yarn.lock,{{ github.workspace }}/client/package.json}"
           
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
         if: steps.prettier-check.outcome == 'failure'
-        run: npx prettier --write ${{ github.workspace }}/${{ steps.filter.outputs.client_files }}  --ignore-path="{./yarn.lock,./package.json}"
+        run: |
+          files=$(echo "${{ steps.filter.outputs.client_files }}" | sed "s@[^ ]*@${{ github.workspace }}/&@g")
+          npx prettier --write $files  --ignore-path="{{{ github.workspace }}/client/yarn.lock,{{ github.workspace }}/client/package.json}"
         # run: |
         #   git fetch origin ${{ env.BRANCH_NAME }}:${{ env.BRANCH_NAME }} --unshallow
         #   git checkout ${{ env.BRANCH_NAME }}
