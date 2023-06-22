@@ -46,7 +46,7 @@ jobs:
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
-          files=$(echo ${{join(steps.filter.outputs.client_files, ' ${{ github.workspace}}/') }}
+          files=$(echo ${{join(steps.filter.outputs.client_files, ' ${{ github.workspace}}/') }})
           npx prettier --check $files --ignore-path="{./yarn.lock,./package.json}"
           
         continue-on-error: true
