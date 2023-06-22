@@ -46,7 +46,9 @@ jobs:
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
-          npx prettier --check ${{ github.workspace }}/${{ steps.filter.outputs.client_files }} --ignore-path="{./yarn.lock,./package.json}"
+          files=$(echo "${{ steps.filter.outputs.client_files }}" | sed "s@^@$GITHUB_WORKSPACE/client/@")
+          npx prettier --check $files --ignore-path="{./yarn.lock,./package.json
+          
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
         if: steps.prettier-check.outcome == 'failure'
