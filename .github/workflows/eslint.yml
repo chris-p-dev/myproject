@@ -6,10 +6,6 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: client
         
     if:
       github.event_name == 'pull_request' && !startsWith(github.base_ref,
@@ -31,9 +27,10 @@ jobs:
           list-files: 'shell'
           filters: |
             client:
-              - added|modified: '{client/src,client/project_utils,client/puppeteer,client/tests}/**/*.{js,ts,tsx,json}'
-              - added|modified: 'client/*.{js,ts,json}'
+              - added|modified: '{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}'
+              - added|modified: '*.{js,ts,json}'
               - added|modified: '.github/**/*.yml'
+          working-directory: client
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
