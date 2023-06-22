@@ -6,12 +6,18 @@ on:
 jobs:
   prettier:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && !startsWith(github.base_ref,
+        
+    if:
+      github.event_name == 'pull_request' && !startsWith(github.base_ref,
       'release/') &&  github.actor != 'aa Dev Bot'
-
+    defaults:
+      run:
+        working-directory: client
+      
     strategy:
       matrix:
         node-version: [16.x]
+    
 
     steps:
       - name: Checkout Code
@@ -21,12 +27,13 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          list-files: "shell"
+          list-files: 'shell'
           filters: |
             client:
               - added|modified: '{client/src,client/project_utils,client/puppeteer,client/tests}/**/*.{js,ts,tsx,json}'
               - added|modified: 'client/*.{js,ts,json}'
               - added|modified: '.github/**/*.yml'
+  
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
@@ -39,22 +46,28 @@ jobs:
         id: prettier-check
         if: ${{ steps.filter.outputs.client == 'true' }}
         run: |
-          npx prettier --check ${{ steps.filter.outputs.client_files }} --ignore-path="{../yarn.lock,../package.json}"
+          files=$(echo "${{ steps.filter.outputs.client_files }}" | sed "s@[^ ]*@${{ github.workspace }}/&@g")
+          npx prettier --write $files --ignore-path="{{{ github.workspace }}/client/yarn.lock,{{ github.workspace }}/client/package.json}"
+          
         continue-on-error: true
       - name: Auto-format Code and Commit Prettier Changes
         if: steps.prettier-check.outcome == 'failure'
         run: |
-          git fetch --unshallow
-          git checkout ${{ env.BRANCH_NAME }}
-          npx prettier --write ${{ steps.filter.outputs.client_files }} ${{ steps.filter.outputs.parent_files }} --ignore-path="{../yarn.lock,../package.json}"
-          git config --global user.email "aaa@gmail.com"
-          git config --global user.name "aa Dev Bot"
-          git add -A
-          git reset yarn.lock
-          git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
-          git push origin ${{ env.BRANCH_NAME }}
+          files=$(echo "${{ steps.filter.outputs.client_files }}" | sed "s@[^ ]*@${{ github.workspace }}/&@g")
+          npx prettier --check $files  --ignore-path="{{{ github.workspace }}/client/yarn.lock,{{ github.workspace }}/client/package.json}"
+        # run: |
+        #   git fetch origin ${{ env.BRANCH_NAME }}:${{ env.BRANCH_NAME }} --unshallow
+        #   git checkout ${{ env.BRANCH_NAME }}
+        #   npx prettier --c=client --write ${{ steps.filter.outputs.client_files }}  --ignore-path="{${{ github.workspace }}/client/yarn.lock,${{ github.workspace }}/client/package.json}"
+        #   git config --global user.email "avb-dev-services@avb.net"
+        #   git config --global user.name "AVB-Dev-Bot"
+        #   git add -A
+        #   git reset yarn.lock
+        #   git commit -m "chore: Auto-run Prettier on files in PR" --no-verify
+        #   git push origin ${{ env.BRANCH_NAME }}
   eslint:
-    if: always() && github.event_name == 'pull_request' && (github.base_ref ==
+    if:
+      always() && github.event_name == 'pull_request' && (github.base_ref ==
       'nextjs' || github.base_ref == 'nextjs-prod'
       ||  startsWith(github.base_ref, 'release/'))
     needs: prettier
