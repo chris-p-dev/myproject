@@ -54,7 +54,7 @@ jobs:
         if: steps.prettier-check.outcome == 'failure'
         run: |
           files=$(echo "${{ steps.filter.outputs.client_files }}" | sed "s@[^ ]*@${{ github.workspace }}/&@g")
-          npx prettier --write $files  --ignore-path="{{{ github.workspace }}/client/yarn.lock,{{ github.workspace }}/client/package.json}"
+          npx prettier --check $files  --ignore-path="{{{ github.workspace }}/client/yarn.lock,{{ github.workspace }}/client/package.json}"
         # run: |
         #   git fetch origin ${{ env.BRANCH_NAME }}:${{ env.BRANCH_NAME }} --unshallow
         #   git checkout ${{ env.BRANCH_NAME }}
