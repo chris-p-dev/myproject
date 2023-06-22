@@ -13,7 +13,8 @@ jobs:
         
     if:
       github.event_name == 'pull_request' && !startsWith(github.base_ref,
-      'release/') &&  github.actor != 'AVB-Dev-Bot'
+      'release/') &&  github.actor != 'aa Dev Bot'
+      
     strategy:
       matrix:
         node-version: [16.x]
