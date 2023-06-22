@@ -24,7 +24,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.AVB_SERVICES_BOT }}
+          token: ${{ secrets.TOKEN }}
       - uses: dorny/paths-filter@v2
         id: filter
         with:
