@@ -33,7 +33,7 @@ jobs:
               - added|modified: '{src,project_utils,puppeteer,tests}/**/*.{js,ts,tsx,json}'
               - added|modified: '*.{js,ts,json}'
               - added|modified: '.github/**/*.yml'
-          working-directory: client
+  
       - name: Save Branch Name to GitHub Environment Variable
         run: echo "BRANCH_NAME=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
       - name: Use Node.js ${{ matrix.node-version }}
