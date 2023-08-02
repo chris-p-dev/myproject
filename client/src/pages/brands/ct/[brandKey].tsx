@@ -331,7 +331,7 @@ const BrandsPage: FC = () => {
     ? `${
         themeGlobal.baseUrlCdn
       }/magento-media/alta-brands-landing/banners/${encodeURIComponent(
-        config.banner_name
+        config.banner_name,
       )}`
     : null;
 
@@ -374,7 +374,7 @@ const BrandsPage: FC = () => {
             })}
             <img
               src={`${baseBannerUrl}-${breakpointBannerSuffixMap.get(
-                "lg"
+                "lg",
               )}.jpg`}
               alt=""
               className={classes.bannerImage}
@@ -402,7 +402,7 @@ const BrandsPage: FC = () => {
               },
               {
                 addQueryPrefix: true,
-              }
+              },
             );
 
             return (
