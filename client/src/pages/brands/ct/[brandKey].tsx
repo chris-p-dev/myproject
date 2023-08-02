@@ -33,14 +33,14 @@ interface StyleProps {
   themeColor: string;
 }
 
-                         const useStyles = makeStyles<Theme, StyleProps>((theme) => {
-                                 const { breakpoints, transitions } = theme;
-                                   const { duration, easing } = transitions;
-                                       const hoverTransition = `${duration.short}ms ${easing.easeOut}`;
+const useStyles = makeStyles<Theme, StyleProps>((theme) => {
+  const { breakpoints, transitions } = theme;
+  const { duration, easing } = transitions;
+  const hoverTransition = `${duration.short}ms ${easing.easeOut}`;
 
-                       return {
-                             root: {
-                            padding: "1.5rem 0.5rem 3rem",
+  return {
+    root: {
+      padding: "1.5rem 0.5rem 3rem",
     },
 
     title: {
