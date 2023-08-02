@@ -1,5 +1,5 @@
-const MyTest = (props) => {
-  return <div>Hello world</div>;
+ 		const MyTest = (props) => {
+  				return <div>Hello world</div>;
 };
 
 export default MyTest;
