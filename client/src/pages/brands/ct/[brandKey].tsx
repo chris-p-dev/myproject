@@ -1,23 +1,23 @@
-import { useCallback, FC, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
-import { clsx } from 'clsx';
-import qs from 'qs';
-import Color from 'color';
-import { makeStyles, useTheme, Theme } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Grid, { GridSize } from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import grey from '@material-ui/core/colors/grey';
+import { useCallback, FC, useEffect } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import { useTranslation } from "react-i18next";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { clsx } from "clsx";
+import qs from "qs";
+import Color from "color";
+import { makeStyles, useTheme, Theme } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Grid, { GridSize } from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import grey from "@material-ui/core/colors/grey";
 
-import Link from 'components/Link';
-import Loading from 'components/Loading';
-import ErrorNotFound from 'components/ErrorNotFound';
-import BrandsLandingHead from 'components/meta/BrandsLandingHead';
+import Link from "components/Link";
+import Loading from "components/Loading";
+import ErrorNotFound from "components/ErrorNotFound";
+import BrandsLandingHead from "components/meta/BrandsLandingHead";
 
 import {
   getBrandData,
@@ -25,9 +25,9 @@ import {
   getLevel2CategoryTrees,
   getPageConfig,
   getBrandsLandingPageStatus,
-} from 'store/brands-landing/selectors';
+} from "store/brands-landing/selectors";
 
-import { fetchBrandLandingData } from 'store/brands-landing/slice';
+import { fetchBrandLandingData } from "store/brands-landing/slice";
 
 interface StyleProps {
   themeColor: string;
@@ -40,59 +40,59 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
 
   return {
     root: {
-      padding: '1.5rem 0.5rem 3rem',
+      padding: "1.5rem 0.5rem 3rem",
     },
 
     title: {
-      marginBottom: '1rem',
-      textAlign: 'center',
+      marginBottom: "1rem",
+      textAlign: "center",
 
-      [breakpoints.up('sm')]: {
-        display: 'flex',
-        alignItems: 'center',
-        textAlign: 'left',
+      [breakpoints.up("sm")]: {
+        display: "flex",
+        alignItems: "center",
+        textAlign: "left",
       },
     },
 
     titleText: {
-      marginTop: '1rem',
+      marginTop: "1rem",
       color: (props) => props.themeColor,
 
-      [breakpoints.only('xs')]: {
-        fontSize: '1.75rem',
+      [breakpoints.only("xs")]: {
+        fontSize: "1.75rem",
       },
 
-      [breakpoints.up('sm')]: {
-        paddingLeft: '1rem',
+      [breakpoints.up("sm")]: {
+        paddingLeft: "1rem",
         marginTop: 0,
-        marginLeft: '1rem',
+        marginLeft: "1rem",
         borderLeft: `1px solid ${grey[500]}`,
       },
     },
 
     banner: {
-      display: 'block',
-      marginBottom: '2rem',
+      display: "block",
+      marginBottom: "2rem",
     },
 
     bannerImage: {
-      display: 'block',
-      width: '100%',
+      display: "block",
+      width: "100%",
     },
 
     categorySection: {
-      display: 'flex',
-      flexDirection: 'column',
-      flexWrap: 'wrap',
-      textAlign: 'center',
+      display: "flex",
+      flexDirection: "column",
+      flexWrap: "wrap",
+      textAlign: "center",
       borderBottom: `1px solid ${grey[400]}`,
 
-      '&:last-child': {
+      "&:last-child": {
         borderRight: 0,
         borderBottom: 0,
       },
 
-      [breakpoints.only('md')]: {
+      [breakpoints.only("md")]: {
         borderRight: `1px solid ${grey[400]}`,
 
         // Remove border-right on all right side columns
@@ -112,7 +112,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
     },
 
     categorySectionTwoCols: {
-      [breakpoints.up('lg')]: {
+      [breakpoints.up("lg")]: {
         borderRight: `1px solid ${grey[400]}`,
 
         [`&:nth-child(2n)`]: {
@@ -130,7 +130,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
     },
 
     categorySectionThreeCols: {
-      [breakpoints.up('lg')]: {
+      [breakpoints.up("lg")]: {
         borderRight: `1px solid ${grey[400]}`,
 
         [`&:nth-child(3n)`]: {
@@ -148,7 +148,7 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
     },
 
     categorySectionFourCols: {
-      [breakpoints.up('lg')]: {
+      [breakpoints.up("lg")]: {
         borderRight: `1px solid ${grey[400]}`,
 
         [`&:nth-child(4n)`]: {
@@ -166,30 +166,30 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
     },
 
     categoryTop: {
-      marginBottom: '0.5rem',
+      marginBottom: "0.5rem",
     },
 
     categoryIcon: {
-      display: 'inline-flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '4rem',
-      height: '4rem',
-      marginBottom: '1rem',
+      display: "inline-flex",
+      justifyContent: "center",
+      alignItems: "center",
+      width: "4rem",
+      height: "4rem",
+      marginBottom: "1rem",
       backgroundColor: (props) => props.themeColor,
-      borderRadius: '50%',
-      fill: '#FFF',
+      borderRadius: "50%",
+      fill: "#FFF",
       fallbacks: {
-        borderRadius: '1000px',
+        borderRadius: "1000px",
       },
     },
 
     categoryIconImage: {
-      width: '50%',
+      width: "50%",
     },
 
     categoryTitle: {
-      marginBottom: '0.5rem',
+      marginBottom: "0.5rem",
     },
 
     categoryTitleLink: (props) => {
@@ -200,25 +200,25 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
         fontWeight: 500,
         transition: `color ${hoverTransition}`,
 
-        '&:hover': {
+        "&:hover": {
           color: themeColor.darken(0.2).toString(),
         },
       };
     },
 
     categoryList: {
-      marginBottom: '0.5rem',
+      marginBottom: "0.5rem",
     },
 
     categoryListItem: {
-      marginBottom: '0.5rem',
+      marginBottom: "0.5rem",
     },
 
     categoryLink: {
       color: grey[500],
       transition: `color ${hoverTransition}`,
 
-      '&:hover': {
+      "&:hover": {
         color: grey[700],
       },
     },
@@ -227,18 +227,18 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
       const themeColor = Color(props.themeColor);
 
       return {
-        maxWidth: '25rem',
-        paddingTop: '0.75rem',
-        paddingBottom: '0.75rem',
-        margin: 'auto auto 0',
-        color: '#FFF',
-        textAlign: 'center',
-        textTransform: 'capitalize',
+        maxWidth: "25rem",
+        paddingTop: "0.75rem",
+        paddingBottom: "0.75rem",
+        margin: "auto auto 0",
+        color: "#FFF",
+        textAlign: "center",
+        textTransform: "capitalize",
         fontWeight: 400,
         backgroundColor: themeColor.toString(),
         borderRadius: 0,
 
-        '&:hover': {
+        "&:hover": {
           backgroundColor: themeColor.darken(0.2).toString(),
         },
       };
@@ -249,32 +249,32 @@ const useStyles = makeStyles<Theme, StyleProps>((theme) => {
 const BrandsPage: FC = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const { t } = useTranslation(['brandslanding']);
+  const { t } = useTranslation(["brandslanding"]);
   const { brandKey } = router.query;
-  const brand = typeof brandKey === 'string' ? brandKey : '';
+  const brand = typeof brandKey === "string" ? brandKey : "";
   const status = useSelector((state) => getBrandsLandingPageStatus(state));
   const brandData = useSelector((state) => getBrandData(state));
   const isBrandsLandingEnabled = useSelector(getBrandsLandingEnabled);
   const brandCategories = useSelector((state) => getLevel2CategoryTrees(state));
   const config = useSelector((state) => getPageConfig(state));
   const classes = useStyles({
-    themeColor: config.color || '',
+    themeColor: config.color || "",
   });
   const theme = useTheme();
   const { breakpoints, global: themeGlobal } = theme;
 
   const refIcon = useCallback((ele) => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     if (ele) {
-             axios
-                .get<string>(ele.getAttribute('data-icon-src'))
-                  .then((resp) => {
-                       ele.innerHTML = resp.data;
-                      })
-                .catch((err) => {
-                window.console.error(err);
-               });
+      axios
+        .get<string>(ele.getAttribute("data-icon-src"))
+        .then((resp) => {
+          ele.innerHTML = resp.data;
+        })
+        .catch((err) => {
+          window.console.error(err);
+        });
     }
   }, []);
 
@@ -300,7 +300,7 @@ const BrandsPage: FC = () => {
     }
   })();
 
-  if (status === 'pending') {
+  if (status === "pending") {
     return <Loading />;
   }
 
@@ -308,7 +308,7 @@ const BrandsPage: FC = () => {
   // A failure does not necessarily mean it is a 404.
   // Properly handle this once "status" includes error
   // code to handle.
-  if (status === 'rejected' || brandData === null) {
+  if (status === "rejected" || brandData === null) {
     return <ErrorNotFound />;
   }
 
@@ -317,21 +317,21 @@ const BrandsPage: FC = () => {
   }
 
   const breakpointBannerSuffixMap: Map<
-    'xl' | 'lg' | 'md' | 'sm' | 'xs',
+    "xl" | "lg" | "md" | "sm" | "xs",
     string
   > = new Map([
-    ['xl', 'xlrg'],
-    ['lg', 'lrg'],
-    ['md', 'med'],
-    ['sm', 'sml'],
-    ['xs', 'sml'],
+    ["xl", "xlrg"],
+    ["lg", "lrg"],
+    ["md", "med"],
+    ["sm", "sml"],
+    ["xs", "sml"],
   ]);
 
   const baseBannerUrl = config.banner_name
     ? `${
         themeGlobal.baseUrlCdn
       }/magento-media/alta-brands-landing/banners/${encodeURIComponent(
-        config.banner_name,
+        config.banner_name
       )}`
     : null;
 
@@ -349,7 +349,7 @@ const BrandsPage: FC = () => {
         <div className={classes.title}>
           <img src={brandData.image} alt={brand} />
           <Typography component="h1" variant="h4" className={classes.titleText}>
-            {t('brandslanding:shop-display-name', 'Shop {{name}}', {
+            {t("brandslanding:shop-display-name", "Shop {{name}}", {
               name: brandData.display_name,
             })}
           </Typography>
@@ -374,7 +374,7 @@ const BrandsPage: FC = () => {
             })}
             <img
               src={`${baseBannerUrl}-${breakpointBannerSuffixMap.get(
-                'lg',
+                "lg"
               )}.jpg`}
               alt=""
               className={classes.bannerImage}
@@ -389,20 +389,20 @@ const BrandsPage: FC = () => {
               url_key,
               entity_id,
               children,
-              include_in_landing = '1',
+              include_in_landing = "1",
             } = category;
 
             // don't display if hidden for landing page
-            if (include_in_landing === '0') return null;
+            if (include_in_landing === "0") return null;
 
             const urlSuffix = qs.stringify(
               {
-                display_mode: 'products',
+                display_mode: "products",
                 manufacturer: brandData.value,
               },
               {
                 addQueryPrefix: true,
-              },
+              }
             );
 
             return (
@@ -455,11 +455,11 @@ const BrandsPage: FC = () => {
                       const {
                         name: childName,
                         url_key: childUrlKey,
-                        include_in_landing: childInLanding = '1',
+                        include_in_landing: childInLanding = "1",
                       } = childCategory;
 
                       // don't display if hidden for landing page
-                      if (childInLanding === '0') return null;
+                      if (childInLanding === "0") return null;
 
                       return (
                         <li
@@ -487,7 +487,7 @@ const BrandsPage: FC = () => {
                   fullWidth
                   className={classes.categoryButton}
                 >
-                  {t('brandslanding:shop-all-name', 'Shop All {{name}}', {
+                  {t("brandslanding:shop-all-name", "Shop All {{name}}", {
                     name,
                   })}
                 </Button>
@@ -513,15 +513,14 @@ BrandsPage.getInitialProps = async (ctx) => {
 
   const brandState = getBrandsLandingPageStatus(store.getState());
 
-  if (res && brandState === 'rejected') {
+  if (res && brandState === "rejected") {
     res.statusCode = 404;
   }
 
   return {
     initialState: store.getState(),
-    namespacesRequired: ['brandslanding'],
+    namespacesRequired: ["brandslanding"],
   };
 };
 
 export default BrandsPage;
-
