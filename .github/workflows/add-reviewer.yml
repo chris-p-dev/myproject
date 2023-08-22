@@ -7,25 +7,7 @@ on:
       - synchronize
 
 jobs:
-  assign_reviewers:
+  add-reviews:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check if PR is not a draft
-        id: check_draft
-        run: echo "IS_DRAFT=${{ github.event.pull_request.draft }}" >> $GITHUB_ENV
-
-      - name: Assign Reviewers
-        if: steps.check_draft.outputs.IS_DRAFT == 'false'
-        run: |
-          reviewers="chris-p-dev"  # Replace with actual usernames
-          pr_number=${{ github.event.pull_request.number }}
-          repo_owner=${{ github.repository_owner }}
-          repo_name=${{ github.repository }}
-          for reviewer in $reviewers; do
-            curl -X POST \
-              -H "Authorization: token YOUR_PAT_HERE" \
-              -H "Accept: application/vnd.github.v3+json" \
-              "https://api.github.com/repos/$repo_owner/$repo_name/pulls/$pr_number/requested_reviewers" \
-              -d "{\"reviewers\": [\"$reviewer\"]}"
-          done
+      - uses: kentaro-m/auto-assign-action@v1.2.5
