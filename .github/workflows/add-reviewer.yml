@@ -1,0 +1,38 @@
+name: Assign Reviewers
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  assign_reviewers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Assign Reviewers
+        id: assign_reviewers
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const token = process.env.GITHUB_TOKEN;
+            const octokit = new Octokit({ auth: token });
+
+            const prNumber = context.payload.pull_request.number;
+            const owner = context.payload.repository.owner.login;
+            const repo = context.payload.repository.name;
+
+            const reviewers = ["chris-p-dev"]; // Add reviewers' usernames here
+
+            await octokit.pulls.requestReviewers({
+              owner,
+              repo,
+              pull_number: prNumber,
+              reviewers
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
