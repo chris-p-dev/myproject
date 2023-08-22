@@ -1,5 +1,5 @@
 # Set to true to add reviewers to pull requests
-addReviewers: false
+addReviewers: true
 
 # Set to true to add assignees to pull requests
 addAssignees: author
@@ -12,7 +12,6 @@ assignees:
 # Set to 0 to add all of the assignees.
 # Uses numberOfReviewers if unset.
 numberOfAssignees: 0
-
 # A list of keywords to be skipped the process that add reviewers if pull requests include it
-skipKeywords:
-  - wip
+# skipKeywords:
+#   - wip
