@@ -1,0 +1,14 @@
+name: Assign Reviewers
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  add-reviews:
+    runs-on: ubuntu-latest
+    if: "!github.event.pull_request.draft" # Run only if the PR is not a draft
+    steps:
+      - uses: kentaro-m/auto-assign-action@v1.2.5
