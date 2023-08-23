@@ -7,8 +7,8 @@ addAssignees: author
 # A list of reviewers to be added to pull requests (GitHub user name)
 reviewers:
   - chris-p-dev
-  - TimeDropsSB
-  - thorai219
+  # - TimeDropsSB
+  # - thorai219
 
 # # A list of assignees, overrides reviewers if set
 # assignees:
