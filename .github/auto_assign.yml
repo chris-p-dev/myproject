@@ -4,14 +4,20 @@ addReviewers: true
 # Set to true to add assignees to pull requests
 addAssignees: author
 
-# A list of assignees, overrides reviewers if set
-assignees:
+# A list of reviewers to be added to pull requests (GitHub user name)
+reviewers:
   - chris-p-dev
+  - TimeDropsSB
+  - thorai219
+
+# # A list of assignees, overrides reviewers if set
+# assignees:
+#   - vNoche
 
 # A number of assignees to add to the pull request
 # Set to 0 to add all of the assignees.
 # Uses numberOfReviewers if unset.
-numberOfAssignees: 0
+numberOfAssignees: 2
 # A list of keywords to be skipped the process that add reviewers if pull requests include it
 # skipKeywords:
 #   - wip
