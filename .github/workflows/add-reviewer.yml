@@ -14,9 +14,12 @@ jobs:
         id: check_draft
         run: echo "IsDraft=${{ github.event.pull_request.draft }}" >> $GITHUB_ENV
 
+      - name: Debug IsDraft value
+        run: echo "IsDraft is ${{ steps.check_draft.outputs.IsDraft }}"
+
       - name: Assign reviewers if not a draft
         if: steps.check_draft.outputs.IsDraft == 'false'
         run: |
           # Use the auto-assign-action to add reviewers here
           # Add your commands to assign reviewers to the PR
-          uses: kentaro-m/auto-assign-action@v1.2.5
+          echo "Assigning reviewers..."
